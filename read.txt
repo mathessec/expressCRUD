@@ -1,0 +1,28 @@
+to start the backend
+
+npm init
+npm i express
+create the index.js file
+add the type->module in package json 
+then in script 
+add the dev: nodemon index.js
+start: node index.js
+
+
+
+rasipi
+register
+add raspy
+crud
+ 
+
+ if u do any changes we have to restart the terminal
+go to the database to delete the database
+
+package used 
+uuid ->id generator
+joi package in npm used as validator for data schema 
+
+next session has mongoose which inbuild consist of data validator
+
+bring all the all config in one page .so that we can avoid importing in all pages
