@@ -1,9 +1,5 @@
-import { MongoClient } from "mongodb";
-import "dotenv/config";
-import { v4 as uuid } from "uuid";
-
-const dbName = process.env.DB_NAME;
-const client = new MongoClient(process.env.DB_URL);
+import recipeModel from "../model/recipe.js";
+import userModel from "../model/user.js";
 
 const recipeUserQuery=[
     {
@@ -21,51 +17,39 @@ const recipeUserQuery=[
 
 const getRecipeById= async (req, res) => {
     try {
-      await client.connect();
-      const recipeCollection = client.db(dbName).collection("recipes");
       const {id} = req.params
-      let recipes = await recipeCollection.aggregate([...recipeUserQuery,{$match:{userId:id}}]).toArray()
+      let recipes = await recipeModel.aggregate([...recipeUserQuery,{$match:{userId:id}}])
       // here user recieve the booelan values whether the user exist or not
       res.status(200).send({
         message:"Data Fetch Succesfully",
         data:recipes
       })
     } catch (error) {
-      console.log(`Error in ${req.originalUrl}`, error);
+      console.log(`Error in ${req.originalUrl}`, error.message);
       res.status(500).send({ message: error.message || "Internal Server Error" });
-    } finally {
-      client.close();
     }
   };
 
 const getAllRecipes= async (req, res) => {
     try {
-      await client.connect();
-      const recipeCollection = client.db(dbName).collection("recipes");
-      let recipes = await recipeCollection.aggregate(recipeUserQuery).toArray()
+      let recipes = await recipeModel.aggregate(recipeUserQuery)
       // here user recieve the booelan values whether the user exist or not
       res.status(200).send({
         message:"Data Fetch Succesfully",
         data:recipes
       })
     } catch (error) {
-      console.log(`Error in ${req.originalUrl}`, error);
+      console.log(`Error in ${req.originalUrl}`, error.message);
       res.status(500).send({ message: error.message || "Internal Server Error" });
-    } finally {
-      client.close();
     }
   };
 
 const createRecipe = async (req, res) => {
   try {
-    await client.connect();
-    const userCollection = client.db(dbName).collection("users");
-    const recipeCollection = client.db(dbName).collection("recipes");
-    let user = await userCollection.findOne({ id: req.body.userId });
+    let user = await userModel.findOne({ id: req.headers.userId });
     // here user recieve the booelan values whether the user exist or not
     if (user) {
-      req.body.id = uuid();
-      await recipeCollection.insertOne(req.body);
+      await recipeModel.create({...req.body,userId: req.headers.userId});
       res.status(200).send({
         message: "Recipe Added Successfully",
       })
@@ -73,10 +57,8 @@ const createRecipe = async (req, res) => {
         res.status(400).send({message:`Invalid userId`})
     }
   } catch (error) {
-    console.log(`Error in ${req.originalUrl}`, error);
+    console.log(`Error in ${req.originalUrl}`, error.message);
     res.status(500).send({ message: error.message || "Internal Server Error" });
-  } finally {
-    client.close();
   }
 };
 

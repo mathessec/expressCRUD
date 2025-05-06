@@ -2,7 +2,10 @@ import express from 'express'
 const app = express()
 import appRoutes from './src/routes/index.js'
 import 'dotenv/config'
+import cors from 'cors'
 
+// act as the license from the front to backend connnecticity 
+app.use(cors())
 
 app.use(express.json())
 //url encoded to convert the encoded data consist of @. to normal form

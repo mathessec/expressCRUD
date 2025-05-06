@@ -1,3 +1,9 @@
+import {v4 as uuid} from "uuid";
+
+const generateUUID=()=>{
+  return uuid()
+}
+
 const generateRandomString = (length) => {
   const characters = "QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm"
 
@@ -9,4 +15,4 @@ const generateRandomString = (length) => {
  return str
 }
 
-export {generateRandomString}
+export {generateRandomString,generateUUID}

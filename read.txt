@@ -26,3 +26,8 @@ joi package in npm used as validator for data schema
 next session has mongoose which inbuild consist of data validator
 
 bring all the all config in one page .so that we can avoid importing in all pages
+
+we should validate both in front and back end,database
+using the joi validation->joi dev
+
+concept middleware
